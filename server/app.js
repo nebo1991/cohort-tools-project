@@ -2,14 +2,23 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const Cohort = require("../server/models/Cohort.model");
+const Student = require("../server/models/Student.model");
 const PORT = 5005;
 
-const cohortsData = require("../server/cohorts.json");
-const studentsData = require("../server/students.json");
+mongoose
+  .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
+  .then((x) =>
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  )
+  .catch((err) => console.error("Error connecting to mongo", err));
 
 // STATIC DATA
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
+const cohortsData = require("../server/cohorts.json");
+const studentsData = require("../server/students.json");
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
@@ -32,11 +41,23 @@ app.get("/docs", (req, res) => {
 });
 
 app.get("/api/cohorts", (request, response) => {
-  response.json(cohortsData);
+  Cohort.find({})
+    .then((cohorts) => {
+      response.status(200).json(cohorts);
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Something went wrong" });
+    });
 });
 
 app.get("/api/students", (request, response) => {
-  response.json(studentsData);
+  Student.find({})
+    .then((students) => {
+      response.status(200).json(students);
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Something went wrong." });
+    });
 });
 
 // START SERVER
