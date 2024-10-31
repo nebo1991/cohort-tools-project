@@ -61,6 +61,16 @@ app.get("/api/students", (request, response) => {
     });
 });
 
+app.get("/api/students/:studentId", async (request, response) => {
+  const { studentId } = request.params;
+  try {
+    const foundStudent = await Student.find({ _id: studentId });
+    response.json(foundStudent);
+  } catch (error) {
+    response.json({ message: "Student with this id not found" });
+  }
+});
+
 app.get("/api/students/cohort/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
   try {
@@ -83,6 +93,8 @@ app.post("/api/students", (request, response) => {
       response.status(500).json({ error: "Failed to create Student." });
     });
 });
+
+//PUT Requests
 
 // START SERVER
 app.listen(PORT, () => {
