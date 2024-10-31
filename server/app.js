@@ -40,6 +40,7 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
+//GET Requests
 app.get("/api/cohorts", (request, response) => {
   Cohort.find({})
     .then((cohorts) => {
@@ -56,7 +57,30 @@ app.get("/api/students", (request, response) => {
       response.status(200).json(students);
     })
     .catch((error) => {
-      res.status(500).json({ message: "Something went wrong." });
+      response.status(500).json({ message: "Something went wrong." });
+    });
+});
+
+app.get("/api/students/cohort/:cohortId", async (request, response) => {
+  const { cohortId } = request.params;
+  try {
+    const foundStudents = await Student.find({ cohort: cohortId });
+    response.json(foundStudents);
+  } catch (error) {
+    response.json({ message: "Something went wrong." });
+  }
+});
+
+//POST Requests
+app.post("/api/students", (request, response) => {
+  const createdStudent = Student.create({
+    ...request.body,
+  })
+    .then((createdStudent) => {
+      response.status(201).json(createdStudent);
+    })
+    .catch((error) => {
+      response.status(500).json({ error: "Failed to create Student." });
     });
 });
 
