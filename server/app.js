@@ -41,6 +41,7 @@ app.get("/docs", (req, res) => {
 });
 
 //GET Requests
+// Get all cohorts
 app.get("/api/cohorts", (request, response) => {
   Cohort.find({})
     .then((cohorts) => {
@@ -51,6 +52,7 @@ app.get("/api/cohorts", (request, response) => {
     });
 });
 
+//Get all students
 app.get("/api/students", (request, response) => {
   Student.find({})
     .then((students) => {
@@ -61,6 +63,7 @@ app.get("/api/students", (request, response) => {
     });
 });
 
+//Get specific/single student
 app.get("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
@@ -71,6 +74,7 @@ app.get("/api/students/:studentId", async (request, response) => {
   }
 });
 
+//Get students with same cohortId
 app.get("/api/students/cohort/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
   try {
@@ -82,6 +86,7 @@ app.get("/api/students/cohort/:cohortId", async (request, response) => {
 });
 
 //POST Requests
+// Create student
 app.post("/api/students", (request, response) => {
   const createdStudent = Student.create({
     ...request.body,
@@ -95,6 +100,34 @@ app.post("/api/students", (request, response) => {
 });
 
 //PUT Requests
+
+//Update student
+app.put("/api/students/:studentId", async (request, response) => {
+  const { studentId } = request.params;
+  try {
+    await Student.findByIdAndUpdate({ _id: studentId }, request.body).then(
+      (student) => {
+        response.status(200).json(student);
+      }
+    );
+  } catch (error) {
+    response.status(500).json(error);
+  }
+});
+
+//DELETE Requests
+
+//Delete student
+app.delete("/api/students/:studentId", async (request, response) => {
+  const { studentId } = request.params;
+  try {
+    await Student.findByIdAndDelete(studentId).then((student) => {
+      response.status(204).send();
+    });
+  } catch (error) {
+    response.status(500).json({ message: "Something went wrong." });
+  }
+});
 
 // START SERVER
 app.listen(PORT, () => {
