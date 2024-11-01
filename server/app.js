@@ -158,11 +158,20 @@ app.put("/api/cohorts/:cohortId", async (request, response) => {
 app.delete("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
-    await Student.findByIdAndDelete(studentId).then((student) => {
-      response.status(204).send();
-    });
+    await Student.findByIdAndDelete({ _id: studentId });
+    response.status(204).send();
   } catch (error) {
     response.status(500).json({ message: "Something went wrong." });
+  }
+});
+
+app.delete("/api/cohorts/:cohortId", async (request, response) => {
+  const { cohortId } = request.params;
+  try {
+    await Cohort.findByIdAndDelete({ _id: cohortId });
+    response.status(204).send();
+  } catch (error) {
+    response(500).json({ message: "Something went wrong" });
   }
 });
 
