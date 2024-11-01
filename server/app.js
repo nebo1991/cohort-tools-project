@@ -99,6 +99,16 @@ app.post("/api/students", (request, response) => {
     });
 });
 
+//Create cohort
+app.post("/api/cohorts", async (request, response) => {
+  try {
+    const cohort = await Cohort.create({ ...request.body });
+    response.status(201).json(cohort);
+  } catch (error) {
+    response.status(500).json({ error: "Failed to create Cohort." });
+  }
+});
+
 //PUT Requests
 
 //Update student
