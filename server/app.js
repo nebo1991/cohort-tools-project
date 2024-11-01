@@ -63,7 +63,7 @@ app.get("/api/students", (request, response) => {
     });
 });
 
-//Get specific/single student
+//Get specific student
 app.get("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
@@ -71,6 +71,17 @@ app.get("/api/students/:studentId", async (request, response) => {
     response.json(foundStudent);
   } catch (error) {
     response.json({ message: "Student with this id not found" });
+  }
+});
+
+//Get specific cohort
+app.get("/api/cohorts/:cohortId", async (request, response) => {
+  const { cohortId } = request.params;
+  try {
+    const foundCohort = await Cohort.find({ _id: cohortId });
+    response.json(foundCohort);
+  } catch (error) {
+    response.json({ message: "Cohort with this id not found" });
   }
 });
 
