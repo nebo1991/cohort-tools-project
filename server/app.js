@@ -174,6 +174,8 @@ app.delete("/api/cohorts/:cohortId", async (request, response) => {
   }
 });
 
+require("./error-handling/index")(app);
+
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
