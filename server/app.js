@@ -42,25 +42,23 @@ app.get("/docs", (req, res) => {
 
 //GET Requests
 // Get all cohorts
-app.get("/api/cohorts", (request, response) => {
-  Cohort.find({})
-    .then((cohorts) => {
-      response.status(200).json(cohorts);
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Something went wrong" });
-    });
+app.get("/api/cohorts", async (request, response) => {
+  try {
+    const cohorts = await Cohort.find({});
+    response.status(200).json(cohorts);
+  } catch (error) {
+    response.status(500).json({ message: "Something went wrong" });
+  }
 });
 
 //Get all students
-app.get("/api/students", (request, response) => {
-  Student.find({})
-    .then((students) => {
-      response.status(200).json(students);
-    })
-    .catch((error) => {
-      response.status(500).json({ message: "Something went wrong." });
-    });
+app.get("/api/students", async (request, response) => {
+  try {
+    const students = await Student.find({});
+    response.status(200).json(students);
+  } catch (error) {
+    response.status(500).json({ message: "Something went wrong" });
+  }
 });
 
 //Get specific student
@@ -98,16 +96,13 @@ app.get("/api/students/cohort/:cohortId", async (request, response) => {
 
 //POST Requests
 // Create student
-app.post("/api/students", (request, response) => {
-  const createdStudent = Student.create({
-    ...request.body,
-  })
-    .then((createdStudent) => {
-      response.status(201).json(createdStudent);
-    })
-    .catch((error) => {
-      response.status(500).json({ error: "Failed to create Student." });
-    });
+app.post("/api/students", async (request, response) => {
+  try {
+    const createdStudent = await Student.create({ ...request.body });
+    response.status(201).json(createdStudent);
+  } catch (error) {
+    response.status(500).json({ error: "Failed to create Student." });
+  }
 });
 
 //Create cohort
