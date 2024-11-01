@@ -54,7 +54,7 @@ app.get("/api/cohorts", async (request, response) => {
 //Get all students
 app.get("/api/students", async (request, response) => {
   try {
-    const students = await Student.find({});
+    const students = await Student.find({}).populate("cohort");
     response.status(200).json(students);
   } catch (error) {
     response.status(500).json({ message: "Something went wrong" });
@@ -65,7 +65,9 @@ app.get("/api/students", async (request, response) => {
 app.get("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
-    const foundStudent = await Student.find({ _id: studentId });
+    const foundStudent = await Student.find({ _id: studentId }).populate(
+      "cohort"
+    );
     response.json(foundStudent);
   } catch (error) {
     response.json({ message: "Student with this id not found" });
@@ -87,7 +89,9 @@ app.get("/api/cohorts/:cohortId", async (request, response) => {
 app.get("/api/students/cohort/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
   try {
-    const foundStudents = await Student.find({ cohort: cohortId });
+    const foundStudents = await Student.find({ cohort: cohortId }).populate(
+      "cohort"
+    );
     response.json(foundStudents);
   } catch (error) {
     response.json({ message: "Something went wrong." });
