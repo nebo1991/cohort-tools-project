@@ -126,13 +126,29 @@ app.post("/api/cohorts", async (request, response) => {
 app.put("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
-    await Student.findByIdAndUpdate({ _id: studentId }, request.body).then(
-      (student) => {
-        response.status(200).json(student);
-      }
+    const student = await Student.findByIdAndUpdate(
+      { _id: studentId },
+      request.body,
+      { new: true }
     );
+    response.status(200).json(student);
   } catch (error) {
-    response.status(500).json(error);
+    response.status(500).json({ error: "Failed to update student." });
+  }
+});
+
+//Update cohort
+app.put("/api/cohorts/:cohortId", async (request, response) => {
+  const { cohortId } = request.params;
+  try {
+    const cohort = await Cohort.findByIdAndUpdate(
+      { _id: cohortId },
+      request.body,
+      { new: true }
+    );
+    response.status(200).json(cohort);
+  } catch (error) {
+    response.status(500).json({ error: "Failed to update cohort." });
   }
 });
 
