@@ -65,7 +65,7 @@ app.get("/api/students", async (request, response) => {
 app.get("/api/students/:studentId", async (request, response) => {
   const { studentId } = request.params;
   try {
-    const foundStudent = await Student.find({ _id: studentId }).populate(
+    const foundStudent = await Student.findById({ _id: studentId }).populate(
       "cohort"
     );
     response.json(foundStudent);
@@ -78,7 +78,8 @@ app.get("/api/students/:studentId", async (request, response) => {
 app.get("/api/cohorts/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
   try {
-    const foundCohort = await Cohort.find({ _id: cohortId });
+    const foundCohort = await Cohort.findById(cohortId);
+
     response.json(foundCohort);
   } catch (error) {
     response.json({ message: "Cohort with this id not found" });
@@ -88,8 +89,9 @@ app.get("/api/cohorts/:cohortId", async (request, response) => {
 //Get students with same cohortId
 app.get("/api/students/cohort/:cohortId", async (request, response) => {
   const { cohortId } = request.params;
+
   try {
-    const foundStudents = await Student.find({ cohort: cohortId }).populate(
+    const foundStudents = await Student.findById({ _id: cohortId }).populate(
       "cohort"
     );
     response.json(foundStudents);
