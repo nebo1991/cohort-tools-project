@@ -7,7 +7,6 @@ const Cohort = require("../server/models/Cohort.model");
 const Student = require("../server/models/Student.model");
 const PORT = 5005;
 require("dotenv").config();
-console.log("TOKEN_SECRET in auth.routes.js:", process.env.TOKEN_SECRET);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
@@ -22,6 +21,8 @@ mongoose
 const cohortsData = require("../server/cohorts.json");
 const studentsData = require("../server/students.json");
 const authRouter = require("./routes/auth.routes");
+const User = require("./models/User.model");
+const { isAuthenticated } = require("./middleware/JWTauthentication");
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
@@ -45,6 +46,9 @@ app.get("/docs", (req, res) => {
 });
 
 //GET Requests
+
+//Get all users
+
 // Get all cohorts
 app.get("/api/cohorts", async (request, response) => {
   try {
@@ -52,6 +56,24 @@ app.get("/api/cohorts", async (request, response) => {
     response.status(200).json(cohorts);
   } catch (error) {
     response.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+app.get("/api/users/:id", isAuthenticated, async (req, res) => {
+  const { id } = req.payload._id;
+  console.log("id: ", id);
+  try {
+    const foundUser = await User.findOne(id);
+
+    console.log("foundUser: ", foundUser);
+
+    if (!foundUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(foundUser);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

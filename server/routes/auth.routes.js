@@ -10,7 +10,7 @@ const saltRounds = 10;
 
 // POST  /auth/signup
 // POST  /auth/signup
-authRouter.post("/signup", async (req, res, next) => {
+authRouter.post("/auth/signup", async (req, res, next) => {
   const { email, password, name } = req.body;
   try {
     if (!email || !password || !name) {
@@ -55,9 +55,8 @@ authRouter.post("/signup", async (req, res, next) => {
 });
 
 // POST  /auth/login
-authRouter.post("/login", async (req, res, next) => {
+authRouter.post("/auth/login", async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("TOKEN_SECRET:", process.env.TOKEN_SECRET);
 
   try {
     if (!email || !password) {
@@ -100,7 +99,7 @@ authRouter.post("/login", async (req, res, next) => {
 // ...
 
 // GET  /auth/verify
-authRouter.get("/verify", isAuthenticated, (req, res, next) => {
+authRouter.get("/auth/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json({ loggedIn: true });
 });
 
