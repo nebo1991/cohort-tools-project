@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const Cohort = require("../server/models/Cohort.model");
 const Student = require("../server/models/Student.model");
 const PORT = 5005;
+require("dotenv").config();
+console.log("TOKEN_SECRET in auth.routes.js:", process.env.TOKEN_SECRET);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
